@@ -1,0 +1,16 @@
+[
+{
+  "modid": "packstuff",
+  "name": "Pack Stuff",
+  "description": "Mod for 1.12 Pack That Has No Name",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ThatGamerBlue"],
+  "credits": "Gnomeo and Juliet 2: Sherlok Gnomes",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

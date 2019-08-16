@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+apply plugin: 'maven'
+
+
+version = "1.0"
+group = "com.thatgamerblue.forge"
+archivesBaseName = "modpackcrap"
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+repositories {
+    if (System.getenv("NEXUS-URL") != null) {
+        maven { url System.getenv("NEXUS-URL") }
+    }
+}
+
+minecraft {
+    version = "1.12.2-14.23.5.2768"
+    runDir = "run"
+    mappings = "snapshot_20171003"
+}
+
+dependencies {
+
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+uploadArchives.dependsOn(sourcesJar)
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: System.getenv("NEXUS_URL")) {
+                authentication(userName: System.getenv("NEXUS_USER"), password: System.getenv("NEXUS_PASSWORD"))
+            }
+        }
+    }
+}
